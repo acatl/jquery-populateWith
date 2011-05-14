@@ -14,7 +14,8 @@
 			valueField: null, 
 			valueFunction: null,
 			textField:null,
-			textFunction:null
+			textFunction:null, 
+			tag:"option",
 		};
 		
 		var optionsSelected = $.extend({}, defaultOptions, options);
@@ -42,7 +43,7 @@
 				text = element;
 			}
 			
-			optionsOutput+='<option value="' + value + '">' + text + '</option>';
+			optionsOutput+='<'+optionsSelected.tag+' value="'+value+'">'+text+'</'+optionsSelected.tag+'>';
 		}
 	
 		return this.each(function(){
