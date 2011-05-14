@@ -40,7 +40,7 @@
 			optionsOutput+='<option value="' + value + '">' + text + '</option>';
 		}
 	
-    return this.each(function(){
+		return this.each(function(){
 			if (optionsSelected.empty) {
 				$(this).children().remove();
 				$(this).html(optionsOutput);
