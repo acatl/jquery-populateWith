@@ -1,0 +1,17 @@
+options {
+	// if true it will clean all options it had before
+	empty:true, 
+	
+	// the name of the field in the model to be used as the value of each option
+	// if not provided it will use the index of the element inside the data source
+	valueField: null,
+	
+	// if provided this function will execute to calculate a value to be assigend to each option element
+	valueFunction: null, 
+	
+	// if specified it will be used as the name of the field to be placed as the option's text
+	textField:null, 
+	
+	// if provided this function will execute to calculate the text to be assigend to each option element
+	textFunction:null		
+}
