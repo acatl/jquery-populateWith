@@ -1,0 +1,248 @@
+h2. populateWith jquery Plugin
+
+h3.Installation
+
+Download the file "jquery.populateWith.js":https://github.com/acatl/jquery-populateWith/raw/master/jquery.populateWith.js .
+
+Add the plugin to your HTML:
+```html
+<script src="https://yoursite.com/plugins-path/jquery.populateWith.js" type="text/javascript"></script> 
+```
+
+h3.Parameters
+
+The populateWith plugin accepts two parameters:
+```js
+$(".selector").populateWith(data, options);
+```
+Where:
+
+* *data* is an array or an object that holds the collection of data to be used to populate the selector.
+* *options* is an object which configures how the selector will be populated.
+
+h3. Options
+
+You may pass an options object that will configure the output of the elements being insterted into your selector.
+
+By default the options has the following values:
+
+```js
+options {
+	// if true it will clean all options it had before
+	empty:true, 
+	
+	// the name of the field in the model to be used as the value of each option
+	// if not provided it will use the index of the element inside the data source
+	valueField: null,
+	
+	// if provided this function will execute to calculate a value to be assigend to each option element
+	valueFunction: null, 
+	
+	// if specified it will be used as the name of the field to be placed as the option's text
+	textField:null, 
+	
+	// if provided this function will execute to calculate the text to be assigend to each option element
+	textFunction:null		
+}
+```
+
+h4. Example outputs
+
+h5. Simple data structure
+
+```js
+var data = [
+	"option 1",
+	"option 2",
+	"option 3",
+	"option 4"
+];
+$("<select></select>").populateWith(data);
+```
+
+will output:
+```html
+<select>​
+  <option value=​"0">​option 1​</option>​
+  <option value=​"1">​option 2​</option>​
+  <option value=​"2">​option 3​</option>​
+  <option value=​"3">​option 4​</option>​
+</select>
+```
+
+h5. Complex data structure
+
+```js
+var data = [
+  {id:2345, label:"option 1"},
+  {id:1234, label:"option 2"},
+  {id:3456, label:"option 3"},
+  {id:7456, label:"option 4"}
+];
+// configure the text option to show the "label" property as its text
+$("<select></select>").populateWith(data, {text:"label"});
+```
+
+will output:
+```html
+<select>​
+  <option value=​"0">​option 1​</option>​
+  <option value=​"1">​option 2​</option>​
+  <option value=​"2">​option 3​</option>​
+  <option value=​"3">​option 4​</option>​
+</select>
+```
+
+h5. option.empty
+
+If true it will clean all child nodes it had before
+
+```js
+var data = [
+	"option 1",
+	"option 2",
+	"option 3",
+	"option 4"
+];
+var select = $("<select></select>").populateWith(data);
+```
+
+will output:
+```html
+<select>​
+  <option value=​"0">​option 1​</option>​
+  <option value=​"1">​option 2​</option>​
+  <option value=​"2">​option 3​</option>​
+  <option value=​"3">​option 4​</option>​
+</select>
+```
+If false, it will append the new children to the end of its content:
+
+```js
+var data = [
+	"option 4",
+	"option 5"
+];
+select.populateWith(data, {empty:false});
+```
+will output:
+```html
+<select>​
+  <option value=​"0">​option 1​</option>​
+  <option value=​"1">​option 2​</option>​
+  <option value=​"2">​option 3​</option>​
+  <option value=​"3">​option 4​</option>​
+  <option value=​"0">​option 5​</option>​
+  <option value=​"1">​option 6​</option>​
+</select>
+```
+
+_note: unless you have configured also the valueField, or valueFunction the *value* of the new added items will be their default index of the last collection appended_
+
+h5. option.valueField
+
+```js
+var data = [
+  {id:2345, label:"option 1"},
+  {id:1234, label:"option 2"},
+  {id:3456, label:"option 3"},
+  {id:7456, label:"option 4"}
+];
+// configure the valueField Option to indicate which property of
+// the model will be used as the value of each child node.
+$("<select></select>").populateWith(data, {valueField:"id"});
+```
+
+will output:
+```html
+<select>​
+  <option value=​"2345">​option 1​</option>​
+  <option value=​"1234">​option 2​</option>​
+  <option value=​"3456">​option 3​</option>​
+  <option value=​"7456">​option 4​</option>​
+</select>
+```
+
+h5. option.valueFunction
+
+```js
+var data = [
+  {id:2345, label:"option 1"},
+  {id:1234, label:"option 2"},
+  {id:3456, label:"option 3"},
+  {id:7456, label:"option 4"}
+];
+// configure the valueField Option to indicate which property of
+// the model will be used as the value of each child node.
+$("<select></select>").populateWith(data, 
+  {
+    valueFunction:function (element, index){
+	    return index + "_" + element.id;
+    }
+  });
+```
+
+will output:
+```html
+<select>​
+  <option value=​"0_2345">​option 1​</option>​
+  <option value=​"1_1234">​option 2​</option>​
+  <option value=​"2_3456">​option 3​</option>​
+  <option value=​"3_7456">​option 4​</option>​
+</select>
+```
+
+h5. option.textField
+
+NOTE: By default, if textField and textFunction are not set, it will try to look for "label" property, if not found it will take the value of the element being iterated as the text value.
+
+```js
+var data = [
+  {id:2345, label:"option 1"},
+  {id:1234, label:"option 2"},
+  {id:3456, label:"option 3"},
+  {id:7456, label:"option 4"}
+];
+// configure the textField Option to indicate which property of
+// the model will be used as the text of each child node.
+$("<select></select>").populateWith(data, {textField:"label"});
+```
+
+will output:
+```html
+<select>​
+  <option value=​"2345">​option 1​</option>​
+  <option value=​"1234">​option 2​</option>​
+  <option value=​"3456">​option 3​</option>​
+  <option value=​"7456">​option 4​</option>​
+</select>
+```
+
+h5. option.textFunction
+
+```js
+var data = [
+  {id:2345, label:"option 1"},
+  {id:1234, label:"option 2"},
+  {id:3456, label:"option 3"},
+  {id:7456, label:"option 4"}
+];
+// configure the textFunction Option to indicate which property of
+// the model will be used as the text of each child node.
+$("<select></select>").populateWith(data, 
+  {
+    textFunction:function (element, index){
+	    return index + "_" + element.label;
+    }
+  });
+```
+
+will output:
+```html
+<select>​
+  <option value=​"0_2345">​option 1​</option>​
+  <option value=​"1_1234">​option 2​</option>​
+  <option value=​"2_3456">​option 3​</option>​
+  <option value=​"3_7456">​option 4​</option>​
+</select>
+```
